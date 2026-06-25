@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  BOILERPLATE_DB_DSN: '{{.BOILERPLATE_DB_DSN | default ""}}'
+  TASKER_DB_DSN: '{{.TASKER_DB_DSN | default ""}}'
 
 tasks:
   help:
@@ -12,16 +12,14 @@ tasks:
 
   confirm:
     desc: confirmation prompt
-    cmds:
-    - |
-      echo -n 'Are you sure? [y/N] ' && read ans && [ ${ans:-N} = y ]
+    prompt: Are you sure?
     silent: true
     internal: true
 
   run:
-    desc: run the cmd/go-boilerplate application
+    desc: run the cmd/go-tasker application
     cmds:
-    - go run ./cmd/go-boilerplate
+    - go run ./cmd/go-tasker
 
   migrations:new:
     desc: create a new database migration
@@ -42,7 +40,7 @@ tasks:
     deps: [ confirm ]
     cmds:
     - echo 'Running up migrations...'
-    - tern migrate -m ./internal/database/migrations --conn-string {{.BOILERPLATE_DB_DSN}}
+    - tern migrate -m ./internal/database/migrations --conn-string {{.TASKER_DB_DSN}}
 
   tidy:
     desc: format all .go files, and tidy and vendor module dependencies
